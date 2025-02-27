@@ -1,4 +1,6 @@
 process QC {
+    label 'process_medium' 
+
     container 'biocontainers/fastqc:v0.11.9_cv7'
 
     input:
