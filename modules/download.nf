@@ -1,4 +1,6 @@
 process DownloadFromSynapse {
+    label 'process_low'  
+
     container 'ghcr.io/sage-bionetworks/synapsepythonclient:v4.6.1'
 
     input:
