@@ -2,11 +2,12 @@ include { SYNAPSE_GET } from "../modules/synapse_get.nf"
 
 workflow GET {
     take:
-    samplesheet
+    samplesheet_ch
     main:
-    Channel
-        .fromPath(samplesheet)
+    samplesheet_ch
         .splitCsv (header:true, sep:',' )
+        // If fastq is a synapse ID (starts with syn), 
+        // branch to syn, else branch to other
         .branch {
             row ->
             syn: row.fastq =~ /syn\d+/

@@ -1,5 +1,7 @@
 process FASTQC {
     container 'biocontainers/fastqc:v0.11.9_cv7'
+    publishDir "${params.outdir}/fastqc/", mode: 'copy'
+    tag {"$meta.id"}
 
     input:
     tuple val(meta), path(fastq_file)
