@@ -1,3 +1,3 @@
-synapse_id,filename
-syn64097744,tiny_n_L001_R1_xxx.fastq.gz
-syn64097744,tiny_n_L001_R2_xxx.fastq.gz
+fastq
+test/SRR6357070_1.fastq.gz
+syn65491470

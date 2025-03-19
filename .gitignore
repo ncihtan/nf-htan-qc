@@ -1,0 +1,5 @@
+.nextflow*
+work/
+htan_test/
+outputs/
+.DS_Store

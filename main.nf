@@ -1,22 +1,24 @@
 nextflow.enable.dsl=2
 
-include { DownloadFromSynapse } from './modules/download.nf'
-include { QC } from './modules/qc.nf'
-include { MultiQC } from './modules/multiqc.nf'
+include {GET} from './workflows/get.nf'
+include { QC } from './workflows/qc.nf'
+include { SYNAPSE_QUERY } from './modules/synapse_get.nf'
+
+params.outdir = 'outputs'
+params.ai = false
+params.query = "SELECT id FROM syn20446927 WHERE name LIke '%fastq.gz' ORDER BY dataFileSizeBytes LIMIT 100"
+params.use_query = false
 
 workflow {
+
     // Get the input CSV file from command-line arguments
-    input_csv = params.input_csv ?: 'input.csv'
+    if (params.use_query) {
+        SYNAPSE_QUERY(params.query)
+        GET(SYNAPSE_QUERY.out)
+    } else {
+        input = Channel.fromFile(params.input_csv)
+        GET(input)
+    }
 
-    // Download files specified in the input CSV
-    downloaded_files = DownloadFromSynapse(input_csv)
-
-    // Properly filter to get only .fastq.gz files
-    fastq_files = downloaded_files.flatten().filter { it.toString().endsWith('.fastq.gz') }
-
-    // Run QC on each .fastq.gz file directly
-    qc_results = QC(fastq_files)
-
-    // Run MultiQC on the collected QC results
-    MultiQC(qc_results)
+    QC(GET.out.fastq_ch)
 }
