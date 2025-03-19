@@ -2,7 +2,8 @@ process MULTIQC {
 
     container "multiqc/multiqc:latest"
     publishDir "${params.outdir}", mode: 'copy'
-    secret 'SEQERA_ACCESS_TOKEN'
+    secret params.ai ? 'SEQERA_ACCESS_TOKEN' : null
+
     
     input:
     path('*', stageAs: 'tmp??/*')
