@@ -1,12 +1,17 @@
-process MultiQC {
+process MULTIQC {
+
+    container "multiqc/multiqc:latest"
+    publishDir "${params.outdir}", mode: 'copy'
+    
     input:
-    path qc_results_files
+    path('*', stageAs: 'tmp??/*')
+
 
     output:
     path 'multiqc_report.html'
 
     script:
     """
-    multiqc ${qc_results_files} --outdir .
+    multiqc .
     """
 }
